@@ -1,1 +1,7 @@
 sunpy
+
+pandas
+numpy
+
+plotly==3.10.0
+matplotlib
