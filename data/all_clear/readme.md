@@ -100,4 +100,3 @@ preliminary results are available on [GitHub](https://github.com/sunspotter/).
 | k_value  | K-factor used for the Elo rating system.    |
 | score    | final score based on the Elo rating system. |
 | std_dev  | standard deviation.                         |
-

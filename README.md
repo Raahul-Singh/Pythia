@@ -3,7 +3,7 @@ Pythia
 ![Python application](https://github.com/Raahul-Singh/pythia/workflows/Python%20application/badge.svg)
 
 Pythia is an open-source Python library for Solar Magnetic Active Region Data Analysis.
-This library holds the principal work done as part of the [OpenAstonomy Google Summer of Code 2020 project](https://summerofcode.withgoogle.com/projects/#5503197600284672), 
+This library holds the principal work done as part of the [OpenAstonomy Google Summer of Code 2020 project](https://summerofcode.withgoogle.com/projects/#5503197600284672),
 
 [**Solar Weather Forecasting using Linear Algebra**](https://openastronomy.org/gsoc/gsoc2020/#/projects?project=space_weather_forecasting_using_linear_algebra)
 
@@ -45,5 +45,3 @@ pip install -e .
 ```
 from the directory you just
 downloaded.
-
-
