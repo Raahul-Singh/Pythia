@@ -1,3 +1,2 @@
-sunpy==2.0.0
-pytest==5.3.5
-pandas==1.0.1
+sunpy
+pandas

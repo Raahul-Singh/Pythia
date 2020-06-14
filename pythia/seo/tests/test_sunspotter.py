@@ -1,11 +1,11 @@
-from pathlib import Path
-
-import pandas as pd
 import pytest
+import pandas as pd
+from pathlib import Path
 from pythia.seo.sunspotter import Sunspotter
 from sunpy.util import SunpyUserWarning
 
-path = Path.cwd() / "data/all_clear"
+
+path = Path(__file__).resolve().parent.parent.parent.parent / "data/all_clear"
 
 
 @pytest.fixture
