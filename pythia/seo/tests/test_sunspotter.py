@@ -52,14 +52,21 @@ def classifications_columns():
 
 
 @pytest.fixture
-def sunspotter(properties_columns, timesfits_columns, classifications_columns):
+def rankings_columns():
+    return ['#id','image_id', 'count', 'k_value', 'score', 'std_dev']
+
+
+@pytest.fixture
+def sunspotter(properties_columns, timesfits_columns, classifications_columns, rankings_columns):
     return Sunspotter(timesfits=path / "lookup_timesfits.csv",
                       properties=path / "lookup_properties.csv",
                       classifications=path / "classifications.csv",
+                      rankings=path/ "rankings.csv",
                       delimiter=';',
                       timesfits_columns=timesfits_columns,
                       properties_columns=properties_columns,
-                      classifications_columns=classifications_columns)
+                      classifications_columns=classifications_columns,
+                      rankings_columns=rankings_columns)
 
 
 @pytest.fixture
@@ -120,28 +127,37 @@ def test_sunspotter_base_object(properties_columns, timesfits_columns):
 
 def test_sunspotter_with_classifications(classifications_columns):
 
-    sunspotter = Sunspotter(timesfits=path / "lookup_timesfits.csv",
-                            properties=path / "lookup_properties.csv")
+    sunspotter = Sunspotter()
 
     assert sunspotter.classifications_columns is None
     assert sunspotter.classifications is None
 
     with pytest.raises(SunpyUserWarning):
         # Because Classifications Columns aren't specified.
-        Sunspotter(timesfits=path / "lookup_timesfits.csv",
-                   properties=path / "lookup_properties.csv",
-                   classifications=path / "classifications.csv")
+        Sunspotter(classifications=path / "classifications.csv")
 
-    assert sunspotter.classifications_columns is None
-    assert sunspotter.classifications is None
-
-    sunspotter = Sunspotter(timesfits=path / "lookup_timesfits.csv",
-                            properties=path / "lookup_properties.csv",
-                            classifications=path / "classifications.csv",
+    sunspotter = Sunspotter(classifications=path / "classifications.csv",
                             classifications_columns=classifications_columns)
 
     assert set(sunspotter.classifications_columns) == set(
         classifications_columns)
+
+
+def test_sunspotter_with_rankings(rankings_columns):
+
+    sunspotter = Sunspotter()
+
+    assert sunspotter.rankings_columns is None
+    assert sunspotter.rankings is None
+
+    with pytest.raises(SunpyUserWarning):
+        # Because Rankings Columns aren't specified.
+        Sunspotter(rankings=path / "rankings.csv")
+
+    sunspotter = Sunspotter(rankings=path / "rankings.csv",
+                            rankings_columns=rankings_columns)
+
+    assert set(sunspotter.rankings_columns) == set(rankings_columns)
 
 
 def test_sunspotter_incorrect_delimiter():

@@ -26,6 +26,7 @@ class Sunspotter:
                  properties: str = path / "lookup_properties.csv", get_all_properties_columns: bool = True,
                  timesfits_columns: list = ['#id'], properties_columns: list = ['#id', 'id_filename'],
                  classifications=None, classifications_columns=None,
+                 rankings=None, rankings_columns=None,
                  delimiter: str = ';', datetime_fmt: str = '%Y-%m-%d %H:%M:%S'):
         """
         Parameters
@@ -54,6 +55,12 @@ class Sunspotter:
         classifications_columns : list, optional
             Columns required from `classifications.csv`
             Default behaviour is not to load the file, hence by default None
+        rankings : str, optional
+            filepath to `rankings.csv`
+            Default behaviour is not to load the file, hence by default None
+        rankings_columns : list, optional
+            Columns required from `rankings.csv`
+            Default behaviour is not to load the file, hence by default None
         delimiter : str, optional
             Delimiter for the CSV files, by default ';'
         datetime_fmt : str, optional
@@ -71,6 +78,9 @@ class Sunspotter:
 
         self.classifications = classifications
         self.classifications_columns = classifications_columns
+
+        self.rankings = rankings
+        self.rankings_columns = rankings_columns
 
         self.datetime_fmt = datetime_fmt
 
@@ -154,6 +164,34 @@ class Sunspotter:
                 raise SunpyUserWarning("Sunspotter Object cannot be created."
                                        " The Classifications CSV is missing the following columns: " +
                                        missing_columns)
+
+        # Reading the rankings file
+        if self.rankings is not None:
+
+            if self.rankings_columns is None:
+                raise SunpyUserWarning("Rankings columns cannot be None"
+                                       "  when classifications.csv is to be loaded.")
+            try:
+                self.rankings = pd.read_csv(self.rankings,
+                                            delimiter=delimiter,
+                                            usecols=self.rankings_columns)
+            except ValueError:
+                raise SunpyUserWarning("Sunspotter Object cannot be created."
+                                       " Either the Rankings columns do not match, or the file is corrupted")
+
+            self.rankings_columns = set(self.rankings_columns)
+
+            if not self.rankings_columns.issubset(self.rankings.columns):
+                missing_columns = self.rankings_columns - self.rankings_columns.intersection(self.rankings.columns)
+                missing_columns = ", ".join(missing_columns)
+
+                raise SunpyUserWarning("Sunspotter Object cannot be created."
+                                       " The Rankings CSV is missing the following columns: " +
+                                       missing_columns)
+
+            if 'image_id' in self.rankings.columns:
+                self.rankings.set_index("image_id", inplace=True)
+
 
     def get_timesfits_id(self, obsdate: str):
         """
